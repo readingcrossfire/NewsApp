@@ -1,0 +1,17 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/node_modules": true
+    },
+    "editor.fontFamily": "'Fira Code Retina'",
+    "editor.fontLigatures": true,
+    "editor.inlayHints.fontFamily": "'Fira Code Retina'",
+    "scm.inputFontFamily": "'Fira Code Retina'",
+    "debug.console.fontFamily": "'Fira Code Retina'",
+    "markdown.preview.fontFamily": "'Fira Code Retina'"
+}
