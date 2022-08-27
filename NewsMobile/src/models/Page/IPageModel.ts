@@ -1,10 +1,11 @@
+import { IMenuTypesModel } from "../MenuTypes/IMenuTypesModel"
 import { IPostModel } from "../Post/IPostModel"
 
 export interface IPageModel {
-    MazePage: {
-        Post: IPostModel[]
-    },
-    EndjinPage: {
-        Post: IPostModel[]
-    };
+    Menu: Array<IMenuTypesModel>,
+    Page: {
+        [T: string]: {
+            Post: Array<IPostModel>
+        },
+    }
 }

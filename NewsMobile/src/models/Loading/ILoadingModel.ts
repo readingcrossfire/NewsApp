@@ -1,5 +1,4 @@
 
-export interface ILoadingModel{
-    IsLoading:boolean;
-
+export interface ILoadingModel {
+    IsShowLoading: boolean;
 }

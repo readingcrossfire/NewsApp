@@ -7,7 +7,7 @@ export const LoadingCom = () => {
 
     //#region Redux
 
-    const isShowLoading = useSelector<RootState>(state => state.Global.Loading.IsLoading);
+    const isShowLoading = useSelector<RootState>(state => state.Global.Loading.IsShowLoading);
 
     //#endregion
 

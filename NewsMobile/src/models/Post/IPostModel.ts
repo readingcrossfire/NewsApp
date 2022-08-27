@@ -1,3 +1,5 @@
+import { IMenuTypesModel } from "../MenuTypes/IMenuTypesModel";
+
 export interface IPostModel {
   Title: string;
   QuickContent: string;
@@ -6,4 +8,5 @@ export interface IPostModel {
   PostUrl: string;
   PostDate: string;
   CreatedDate: Date;
+  MenuTypes: IMenuTypesModel;
 }

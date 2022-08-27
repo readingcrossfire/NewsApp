@@ -5,6 +5,7 @@ import { NativeBaseProvider } from 'native-base';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
 import React, { useEffect, type PropsWithChildren } from 'react';
 import {
+  Dimensions,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -27,6 +28,8 @@ import { RootView } from './src/views/RootView';
 import { Button, Provider as AntProvider, Toast } from '@ant-design/react-native';
 import { ActivityIndicator } from '@ant-design/react-native';
 import { LoadingCom } from './src/components/Loading';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ModalCom } from './src/components/Modal';
 
 
 const App = () => {
@@ -39,18 +42,20 @@ const App = () => {
 
   return (
     <ReduxProvider store={GlobalStore}>
-      <SafeAreaView style={styles.root}>
+      <NavigationContainer>
         <NativeBaseProvider>
-          <NavigationContainer>
-            <AntProvider>
-              <RootView />
-              <LoadingCom />
-            </AntProvider>
-          </NavigationContainer>
+          <GestureHandlerRootView >
+            <SafeAreaView style={styles.root}>
+              <AntProvider>
+                <RootView />
+                <LoadingCom />
+                <ModalCom />
+              </AntProvider>
+            </SafeAreaView>
+          </GestureHandlerRootView>
         </NativeBaseProvider>
-      </SafeAreaView>
+      </NavigationContainer>
     </ReduxProvider>
-
   );
 };
 
@@ -59,6 +64,6 @@ export default App;
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    height: Dimensions.get('window').height
   }
 })

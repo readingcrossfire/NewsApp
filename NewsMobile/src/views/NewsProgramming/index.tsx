@@ -1,43 +1,69 @@
 import { Badge, Button, Checkbox, Tabs, Tag, WhiteSpace, WingBlank } from "@ant-design/react-native";
-import React, { useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native";
-import { Text, VStack } from "native-base"
+import { HandleGetAllCodeMazeThunk, HandleGetAllMenuTypesThunk } from "../../redux/Slice/PageSlice";
+import { Hidden, Text, VStack, View } from "native-base"
+import { HideLoading, ShowLoading } from "../../redux/Slice/GlobalSlice";
+import React, { useEffect, useRef, useState } from "react"
+import { SafeAreaView, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { EndjinView } from "../Endjin";
-import { HandleGetAllCodeMazeThunk } from "../../redux/Slice/PageSlice";
-import { IPageModel } from './../../models/Page/IPageModel';
 import { MazeCodeView } from "../MazeCode";
+import { NavigationStackProp } from 'react-navigation-stack';
 import { RootState } from "../../redux/Store";
 import { TabData } from "@ant-design/react-native/lib/tabs/PropsType";
 
-export const NewsProgrammingView = () => {
+//#region Props
+
+interface INewsProgrammingViewProps {
+    navigation: NavigationStackProp;
+}
+
+//#endregion
+
+export const NewsProgrammingView = (props: INewsProgrammingViewProps) => {
 
     //#region Redux
-    const mazePost = useSelector<RootState>((state) => state.Page.MazePage.Post);
+
+    const pagesSelector = useSelector((state: RootState) => state.Page);
     const dispatch = useDispatch<any>();
 
     //#endregion
 
-    //#region Variable
-
-    const tabs: TabData[] = [
-        { title: "MazeCode" },
-        { title: "Endjin" }
-    ]
-
-
-    //#endregion
 
     //#region State
 
+    const [tabs, setTabs] = useState<Array<TabData>>([]);
+
     //#endregion
 
+    //#region Effect
+
     useEffect(() => {
-        (async () => {
-            await dispatch(HandleGetAllCodeMazeThunk());
-        })()
-    }, [])
+        dispatch(ShowLoading());
+        dispatch(HandleGetAllMenuTypesThunk({ UseCache: true })).then((result: any) => {
+            // dispatch(HideLoading())
+        })
+    }, []);
+
+    useEffect(() => {
+        let tabDataResult = pagesSelector.Menu.map(item => {
+            let menuResult: TabData = {
+                title: item.Name,
+                MenuTypes: item,
+            };
+
+            return menuResult;
+        })
+
+        setTabs(tabDataResult);
+    }, [pagesSelector.Menu]);
+
+    //#endregion
+
+    //#region Function
+
+    //#endregion
+
 
     return (
         <Tabs
@@ -48,16 +74,23 @@ export const NewsProgrammingView = () => {
             tabBarActiveTextColor="#005db4"
             renderTab={(tab) => (
                 <Badge
-                    text={"C# 9"}
+                    text={`${tab.MenuTypes.Type}`}
                     styles={{
-                        text: styles.badgeText
-                    }}>
+                        text: styles.badgeText,
+                        textDom: {
+                            minWidth: 30,
+                            display: "flex",
+                            alignSelf:"center"
+                        }
+                    }}
+                >
                     <Text>{tab.title}</Text>
                 </Badge>
             )}
+
         >
             <View style={styles.tabContent}>
-                <MazeCodeView />
+                <MazeCodeView Navigation={props.navigation} />
             </View>
             <View style={styles.tabContent}>
                 <EndjinView />
@@ -67,11 +100,18 @@ export const NewsProgrammingView = () => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "red"
+    },
     tabContent: {
         flex: 1,
+        backgroundColor: "white"
     },
     badgeText: {
         color: "white",
         fontSize: 7,
+        display: "flex",
+        flexDirection: "row"
     }
 })
