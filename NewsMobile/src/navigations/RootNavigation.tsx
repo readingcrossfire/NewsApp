@@ -1,9 +1,8 @@
-import { StackNavigationOptions, createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
 
+import React from "react";
 import { ExtensionView } from "../views/Extension";
 import { MainNavigation } from "./MainNavigation";
-import React from "react";
-import { StyleSheet } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -41,34 +40,5 @@ export const RootNavigation = () => {
 
 //#region Styles
 
-const styles = StyleSheet.create({
-    containerNavigation: {
-        width: "40%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginRight: 10
-    },
-    buttonNavigation: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        position: "relative"
-    },
-    buttonNextPage: {
-    },
-    buttonPreviousPage: {
-    },
-    buttonText: {
-        position: "absolute",
-    },
-    buttonPreviousText: {
-        left: 20
-    },
-    buttonNextText: {
-        right: 20
-    }
-});
 
 //#endregion

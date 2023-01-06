@@ -1,20 +1,28 @@
-import { HideLoading, HideModal, ShowLoading, ShowModal } from "../../redux/Slice/GlobalSlice";
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { HideLoading, ShowActionSheet, ShowLoading } from "../../redux/Slice/GlobalSlice";
 
-import { HandleGetAllCodeMazeThunk } from "../../redux/Slice/PageSlice";
-import { IPostModel } from './../../models/Post/IPostModel';
-import { PostCom } from "../../components/Post";
-import { RootState } from "../../redux/Store";
-import { ScrollViewCom } from "../../components/ScrollView";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StyleSheet } from "react-native";
-import { NavigationStackProp } from "react-navigation-stack";
-import { ExtensionViewEnum } from "../../models/Enum/ExtensionViewEnum";
+import { PostCom } from "../../components/Post";
+import { ScrollViewCom } from "../../components/ScrollView";
+import { GLOBAL_CONSTANT } from "../../constant/GlobalConstant";
+import { ExtensionViewEnum } from "../../models/ExtensionView/ExtensionViewEnum";
+import { IPostModel } from "../../models/Post/IPostModel";
+import { GlobalNavigate } from "../../navigations/GlobalNavigation";
+import { GlobalPropsNavigation } from "../../navigations/GlobalPropsNavigation";
+import { HandleGetCodeMazeThunk } from "../../redux/Slice/PageSlice";
+import { RootState } from "../../redux/Store";
+import { Button } from "native-base";
+import { WhiteSpace } from "@ant-design/react-native";
 
 //#region Props
 
+type Props = NativeStackScreenProps<GlobalPropsNavigation, 'NewsProgramming'>;
+
 interface IMazeCodeViewProps {
-    Navigation: NavigationStackProp
+    Navigation: Props;
+    ListPost: Array<IPostModel>
 }
 
 //#endregion
@@ -22,7 +30,7 @@ interface IMazeCodeViewProps {
 export const MazeCodeView = (props: IMazeCodeViewProps) => {
     //#region Redux
 
-    const lstPostSelector = useSelector((state: RootState) => state.Page.Page?.CodeMaze?.Post ?? []);
+    const pagingSelector = useSelector((state: RootState) => state.Page.Paging);
     const dispatch = useDispatch<any>();
 
     //#endregion
@@ -30,27 +38,28 @@ export const MazeCodeView = (props: IMazeCodeViewProps) => {
     //#region Effect
 
     useEffect(() => {
-        // dispatch(ShowLoading());
-        dispatch(HandleGetAllCodeMazeThunk({ UseCache: true })).then((result: any) => {
-            dispatch(HideLoading());
-        });
 
     }, [])
 
     //#endregion
 
-
     //#region Function
 
     const handleRefresh = () => {
         dispatch(ShowLoading());
-        dispatch(HandleGetAllCodeMazeThunk({ UseCache: false })).then((result: any) => {
+        dispatch(HandleGetCodeMazeThunk({
+            UseCache: false,
+            Paging: {
+                PageIndex: pagingSelector.PageIndex,
+                PageSize: GLOBAL_CONSTANT.PAGESIZE_DEFAULT
+            }
+        })).then((result: any) => {
             dispatch(HideLoading());
         });
     }
 
-    const handlePostPress = (item: IPostModel) => {
-        props.Navigation.navigate("Extention", {
+    const handleReadPost = (item: IPostModel) => {
+        GlobalNavigate("Extention", {
             Type: ExtensionViewEnum.WEBVIEW,
             Title: item.Title,
             Props: {
@@ -66,10 +75,9 @@ export const MazeCodeView = (props: IMazeCodeViewProps) => {
 
     return (
         <>
-            <ScrollViewCom Styles={styles.container} onRefresh={handleRefresh} ShowsVerticalScrollIndicator={true}>
+            <ScrollViewCom Styles={styles.container} onRefresh={handleRefresh} ShowsVerticalScrollIndicator={true} NestedScrollEnabled={true} >
                 {
-                    lstPostSelector && lstPostSelector.map((item, index) => {
-
+                    props.ListPost && props.ListPost.map((item, index) => {
                         return (
                             <PostCom
                                 {...item}
@@ -83,7 +91,7 @@ export const MazeCodeView = (props: IMazeCodeViewProps) => {
                                     marginTop: 40,
                                     marginBottom: 40,
                                 }}
-                                onPress={(event) => handlePostPress(item)}
+                                onPress={(event) => handleReadPost(item)}
                             />
                         )
                     })

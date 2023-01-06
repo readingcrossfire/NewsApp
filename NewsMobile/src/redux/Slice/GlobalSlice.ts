@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Stack } from 'native-base';
 import { IModalModel } from '../../models/Modal/IModalModel';
 import { IModalDispatchModel } from '../../models/Modal/IModalDispatchModel';
+import { IActionSheetDispatchModel } from '../../models/ActionSheet/IActionSheetDispatchModel';
 
 const initGlobal: IGlobalModel = {
     Loading: {
@@ -16,6 +17,12 @@ const initGlobal: IGlobalModel = {
         TextButtonCancel: "Huỷ bỏ",
         HandleButtonOkPress: () => { },
         HandleButtonCancelPress: () => { }
+    },
+    ActionSheet: {
+        IsShowActionSheet: false,
+        Title: "",
+        SubTitle: "",
+        ButtonAction: []
     }
 };
 
@@ -44,9 +51,23 @@ const GlobalSlice = createSlice({
         HideModal(state) {
             state.Modal.IsShowModel = false;
             return state;
+        },
+        ShowActionSheet(state, action: PayloadAction<IActionSheetDispatchModel>) {
+            state.ActionSheet.IsShowActionSheet = true;
+            state.ActionSheet.Title = action.payload.Title;
+            state.ActionSheet.SubTitle = action.payload.SubTitle;
+            state.ActionSheet.ButtonAction = action.payload.ButtonAction;
+            return state;
+        },
+        HideActionSheet(state) {
+            state.ActionSheet.IsShowActionSheet = false;
+            state.ActionSheet.Title = "";
+            state.ActionSheet.SubTitle = "";
+            state.ActionSheet.ButtonAction = [];
+            return state;
         }
     },
 });
 
-export const { ShowLoading, HideLoading, ShowModal, HideModal } = GlobalSlice.actions;
+export const { ShowLoading, HideLoading, ShowModal, HideModal, ShowActionSheet, HideActionSheet } = GlobalSlice.actions;
 export default GlobalSlice.reducer;

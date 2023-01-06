@@ -1,1 +1,1 @@
-export const MENUTYPE_GETALL = (useCache: boolean = false) => `http://www.newsapp.somee.com/API/MenuTypes/GetAll?useCache=${useCache}`;
+export const MENUTYPE_GETALL_API_PATH = (useCache: boolean = false) => `MenuTypes/GetAll?useCache=${useCache}`;

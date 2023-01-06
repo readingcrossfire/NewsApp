@@ -73,43 +73,44 @@ export const PostCom = (props: IPostProps) => {
     return (
         <Swipeable renderLeftActions={renderLeftActions}>
             <TouchableWithoutFeedback onPressIn={startScaleAnimation}>
-                <Animated.View style={[animatedStyle]}>
-                    <Box my={2} rounded="lg" overflow="hidden" borderColor="gray.50" borderWidth="1" _dark={{
-                        borderColor: "gray.800",
-                        backgroundColor: "gray.700"
-                    }} _light={{
-                        backgroundColor: "gray.50"
-                    }}
-                        style={props.Styles}
-                    >
-                        <Box>
-                            <AspectRatio w="100%" ratio={16 / 9}>
-                                <Image h="100%" w="100%" rounded="lg" source={imagePost} alt="image" />
-                            </AspectRatio>
-                        </Box>
-                        <Stack p="4" space={3}>
-                            <Stack space={2}>
-                                <Heading size="md" ml="-1">
-                                    {props.Title}
-                                </Heading>
-                            </Stack>
-                            <Text fontWeight="400">
-                                {props.QuickContent}
-                            </Text>
-                            <HStack alignItems="center" space={4} justifyContent="flex-start">
-                                <Text color="coolGray.600" _dark={{
-                                    color: "warmGray.200"
-                                }} fontWeight="400">
-                                    {props.PostDate}
-                                </Text>
-                            </HStack>
-                            <HStack alignItems="center" space={4} justifyContent="flex-end">
-                                <Button _android={{
-                                }} onPress={props.onPress}>Đọc tiếp</Button>
-                            </HStack>
-                        </Stack>
+
+                <Box my={2} rounded="lg" overflow="hidden" borderColor="gray.50" borderWidth="1" _dark={{
+                    borderColor: "gray.800",
+                    backgroundColor: "gray.700"
+                }} _light={{
+                    backgroundColor: "gray.50"
+                }}
+                    style={props.Styles}
+                >
+                    <Box>
+                        <AspectRatio w="100%" ratio={16 / 9}>
+                            <Image h="100%" w="100%" rounded="lg" source={imagePost} alt="image" />
+                        </AspectRatio>
                     </Box>
-                </Animated.View>
+                    <Stack p="4" space={3}>
+                        <Stack space={2}>
+                            <Heading size="md" ml="-1">
+                                {props.Title}
+                            </Heading>
+                        </Stack>
+                        <Text fontWeight="400">
+                            {props.QuickContent}
+                        </Text>
+                        <HStack alignItems="center" space={4} justifyContent="flex-start">
+                            <Text color="coolGray.600" _dark={{
+                                color: "warmGray.200"
+                            }} fontWeight="400">
+                                {props.PostDate}
+                            </Text>
+                        </HStack>
+                        <HStack alignItems="center" space={4} justifyContent="flex-end">
+                            <Animated.View style={[animatedStyle]}>
+                                <Button onPress={props.onPress}>Đọc tiếp</Button>
+                            </Animated.View>
+                        </HStack>
+
+                    </Stack>
+                </Box>
             </TouchableWithoutFeedback>
         </Swipeable>
     )

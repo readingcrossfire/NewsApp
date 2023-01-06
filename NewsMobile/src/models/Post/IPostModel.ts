@@ -1,4 +1,5 @@
 import { IMenuTypesModel } from "../MenuTypes/IMenuTypesModel";
+import { IPagingModel } from "../Paging/IPagingModel";
 
 export interface IPostModel {
   Title: string;
@@ -9,4 +10,5 @@ export interface IPostModel {
   PostDate: string;
   CreatedDate: Date;
   MenuTypes: IMenuTypesModel;
+  Paging: IPagingModel;
 }

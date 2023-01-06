@@ -1,6 +1,6 @@
+import { IAPIResultBaseModel } from "./APIResultBaseModel";
 
-export interface IAPIResultModel<T> {
-    IsError: boolean;
-    Message: string;
+export interface IAPIResultModel<T> extends IAPIResultBaseModel {
+
     ResultObject: T;
 }

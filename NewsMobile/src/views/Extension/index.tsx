@@ -1,14 +1,10 @@
 import React, { ReactNode, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RouteProp } from '@react-navigation/native';
-import { ExtensionViewEnum } from "../../models/Enum/ExtensionViewEnum";
+import { ExtensionViewEnum } from "../../models/ExtensionView/ExtensionViewEnum";
 import { WebViewCom } from "../../components/WebView";
 
 //#region Props
-
-export interface IExtensionViewRouteProps {
-
-}
 
 export type ExtensionViewRoutePropsType = {
     // Type: {};
@@ -34,7 +30,6 @@ type PropsType = NativeStackScreenProps<ExtensionViewRoutePropsType, "Extension"
 export const ExtensionView = (props: PropsType) => {
 
     //#region Effect
-
     useEffect(() => {
         props.navigation.setOptions({ title: props.route.params?.Title ?? "" })
     }, [])

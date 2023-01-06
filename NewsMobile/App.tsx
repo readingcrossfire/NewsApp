@@ -1,56 +1,64 @@
 
 
 import { NavigationContainer } from '@react-navigation/native';
-import { NativeBaseProvider } from 'native-base';
-import { color } from 'native-base/lib/typescript/theme/styled-system';
-import React, { useEffect, type PropsWithChildren } from 'react';
+import { Alert, NativeBaseProvider } from 'native-base';
+import React, { useEffect } from 'react';
 import {
   Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+  SafeAreaView, StyleSheet, useColorScheme
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import { Provider as ReduxProvider, useDispatch, useSelector } from 'react-redux';
+import { Provider as AntProvider } from '@ant-design/react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Provider as PaperProvider } from 'react-native-paper';
+import DeviceInfo from 'react-native-device-info';
+import { Provider as ReduxProvider } from 'react-redux';
+import { ActionSheetCom } from './src/components/ActionSheet';
+import { LoadingCom } from './src/components/Loading';
+import { ModalCom } from './src/components/Modal';
+import { GlobalNavigationRef } from './src/navigations/GlobalNavigation';
 import { GlobalStore } from './src/redux/Store';
 import { RootView } from './src/views/RootView';
-import { Button, Provider as AntProvider, Toast } from '@ant-design/react-native';
-import { ActivityIndicator } from '@ant-design/react-native';
-import { LoadingCom } from './src/components/Loading';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ModalCom } from './src/components/Modal';
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import { FireBase } from './src/firebase/FireBase';
+import { FireBaseServices } from './src/services/FireBaseServices';
 
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  useEffect(() => {
+    (async () => {
+      await FireBase.Init(async () => {
+        await FireBase.GetToken(async () => {
+          const deviceID = await DeviceInfo.getUniqueId();
+          await FireBaseServices.CheckToken({ DeviceID: deviceID, Token: FireBase.Token });
+          await FireBase.ReceivedNotification((remoteMsg: FirebaseMessagingTypes.RemoteMessage) => {
+            console.log(remoteMsg.data);
+            console.log("Nhận tin từ Firebase");
+          });
+        })
+      }, () => { });
 
+    })();
+
+
+
+  }, [])
 
   return (
     <ReduxProvider store={GlobalStore}>
-      <NavigationContainer>
+      <NavigationContainer ref={GlobalNavigationRef}>
         <NativeBaseProvider>
           <GestureHandlerRootView >
             <SafeAreaView style={styles.root}>
-              <AntProvider>
-                <RootView />
-                <LoadingCom />
-                <ModalCom />
-              </AntProvider>
+              <PaperProvider>
+                <AntProvider>
+                  <RootView />
+                  <LoadingCom />
+                  <ModalCom />
+                  <ActionSheetCom />
+                </AntProvider>
+              </PaperProvider>
             </SafeAreaView>
           </GestureHandlerRootView>
         </NativeBaseProvider>
